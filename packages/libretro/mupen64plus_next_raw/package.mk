@@ -19,7 +19,7 @@
 ################################################################################
 
 PKG_NAME="mupen64plus_next_raw"
-PKG_VERSION="96608ba"
+PKG_VERSION="31d71a237e49e87c03ecd68524345371a075d33c"
 PKG_REV="1"
 PKG_ARCH="any"
 PKG_LICENSE="GPLv2"
@@ -40,6 +40,9 @@ pre_configure_target() {
 }
 
 make_target() {
+  # build libhidapi-hidraw ahead of time so we can link to it
+  (cd hidapi/linux && make -f Makefile-manual clean && make -f Makefile-manual libs)
+
   case $PROJECT in
     RPi|Gamegirl|Slice)
       CFLAGS="$CFLAGS -I$SYSROOT_PREFIX/usr/include/interface/vcos/pthreads \
